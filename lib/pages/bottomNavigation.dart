@@ -4,12 +4,12 @@ import 'package:recipe_wizard/pages/Home.dart';
 import 'package:recipe_wizard/pages/ShoppingList.dart';
 import 'package:recipe_wizard/pages/Stock.dart';
 
-class BottomNavExample extends StatefulWidget {
+class BottomNavigation extends StatefulWidget {
   @override
-  _BottomNavExampleState createState() => _BottomNavExampleState();
+  BottomNavigationState createState() => BottomNavigationState();
 }
 
-class _BottomNavExampleState extends State<BottomNavExample> {
+class BottomNavigationState extends State<BottomNavigation> {
   int _currentIndex = 0;
 
   final List<Widget> _pages = [
@@ -32,19 +32,19 @@ class _BottomNavExampleState extends State<BottomNavExample> {
         },
         items: const [
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
+            icon: Icon(Icons.home_rounded),
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.favorite),
+            icon: Icon(Icons.favorite_rounded),
             label: 'Favorite',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart),
+            icon: Icon(Icons.shopping_cart_rounded),
             label: 'Shopping List',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.storage),
+            icon: Icon(Icons.storage_rounded),
             label: 'Stock',
           ),
         ],

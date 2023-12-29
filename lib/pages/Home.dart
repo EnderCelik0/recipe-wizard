@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:recipe_wizard/pages/FavRecipe.dart';
+import 'package:recipe_wizard/pages/profile_drawer.dart';
 import 'package:recipe_wizard/pages/recipeDetails.dart';
 
 class Home extends StatefulWidget {
@@ -103,6 +103,7 @@ class _HomeState extends State<Home> {
 
     return MaterialApp(
       home: Scaffold(
+        drawer: ProfileDrawer(),
         appBar: AppBar(
           title: Container(
             padding: EdgeInsets.symmetric(horizontal: 8.0),

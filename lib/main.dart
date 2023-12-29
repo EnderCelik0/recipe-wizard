@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:recipe_wizard/pages/add_recipe.dart';
 import 'package:recipe_wizard/pages/bottomNavigation.dart';
 
 void main() {
@@ -33,7 +34,7 @@ class MyApp extends StatelessWidget {
           unselectedItemColor: Colors.white,
         ),
       ),
-      home: BottomNavExample(),
+      home: BottomNavigation(),
     );
   }
 }
