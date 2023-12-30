@@ -128,7 +128,7 @@ class _AddRecipeState extends State<AddRecipe> {
         });
       },
       child: AnimatedContainer(
-        duration: Duration(milliseconds: 300),
+        duration: Duration(milliseconds: 600),
         curve: isSelected ? Curves.easeOutBack : Curves.easeInBack,
         decoration: BoxDecoration(
           color: isSelected
@@ -188,8 +188,8 @@ class _AddRecipeState extends State<AddRecipe> {
                         title.isNotEmpty &&
                         ingredients.isNotEmpty &&
                         steps.isNotEmpty & allergens
-                    ? 'Harika!'
-                    : 'Hay Aksi!',
+                    ? 'Harika !'
+                    : 'Hay Aksi !',
                 style: TextStyle(color: Colors.white),
               ),
             ],
