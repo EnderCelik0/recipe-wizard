@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:recipe_wizard/pages/add_recipe.dart';
-import 'package:recipe_wizard/pages/bottomNavigation.dart';
+//import 'package:recipe_wizard/pages/Login.dart';
+import 'package:recipe_wizard/pages/loginuser.dart';
+//import 'package:recipe_wizard/pages/add_recipe.dart';
+//import 'package:recipe_wizard/pages/bottomNavigation.dart';
 
 void main() {
   runApp(const MyApp());
@@ -34,7 +36,7 @@ class MyApp extends StatelessWidget {
           unselectedItemColor: Colors.white,
         ),
       ),
-      home: BottomNavigation(),
+      home:Login(),
     );
   }
 }
