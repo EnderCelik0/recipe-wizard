@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:recipe_wizard/pages/login.dart';
+import 'package:recipe_wizard/pages/signupuser.dart';
 
-class SignUp extends StatefulWidget {
+
+class Login extends StatefulWidget {
   @override
-  _SignUpState createState() => _SignUpState();
+  _LoginState createState() => _LoginState();
 }
 
-class _SignUpState extends State<SignUp> {
+class _LoginState extends State<Login> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -72,6 +73,6 @@ class _SignUpState extends State<SignUp> {
     // Kayıt işlemleri burada yapılacak
     // Kullanıcı adı ve şifre gibi bilgileri kullanarak backend'e kayıt yapabilirsiniz
     // Ardından giriş ekranına yönlendirebilirsiniz
-    Navigator.push(context, MaterialPageRoute(builder: (context) => Login()));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => SignUp()));
   }
 }

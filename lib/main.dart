@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:recipe_wizard/pages/bottom_navigation.dart';
-import 'package:recipe_wizard/pages/SignUp.dart';
+import 'package:recipe_wizard/pages/signupuser.dart';
 
 void main() {
   runApp(const MyApp());
