@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:recipe_wizard/pages/Home.dart';
+import 'package:recipe_wizard/modals/recipe_modal.dart';
+import 'package:recipe_wizard/pages/recipe_card.dart';
 
-class FavRecipe extends StatefulWidget {
+class FavRecipe extends StatelessWidget {
   final List<Recipe> favoriteRecipes;
 
-  const FavRecipe({required this.favoriteRecipes, Key? key}) : super(key: key);
+  FavRecipe({required this.favoriteRecipes});
 
-  @override
-  State<FavRecipe> createState() => _FavRecipeState();
-}
-
-class _FavRecipeState extends State<FavRecipe> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,11 +14,13 @@ class _FavRecipeState extends State<FavRecipe> {
         title: Text('Favorite Recipes'),
       ),
       body: ListView.builder(
-        itemCount: widget.favoriteRecipes.length,
+        itemCount: favoriteRecipes.length,
         itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(widget.favoriteRecipes[index].title),
-            subtitle: Text(widget.favoriteRecipes[index].category),
+          return RecipeCard(
+            recipe: favoriteRecipes[index],
+            onFavoriteChanged: (isFavorite) {
+              // Handle favorite status change if needed
+            },
           );
         },
       ),

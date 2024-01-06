@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:recipe_wizard/pages/Home.dart';
+import 'package:recipe_wizard/modals/recipe_modal.dart';
+import 'package:recipe_wizard/pages/recipe_card.dart';
 
 class RecipeDetails extends StatefulWidget {
   final Recipe recipe;
@@ -115,26 +116,32 @@ class _RecipeDetailsState extends State<RecipeDetails>
                       ),
                       SizedBox(height: 12.0),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Icon(Icons.timer, size: 20.0),
-                          SizedBox(width: 4.0),
-                          Text(
-                            widget.recipe.duration,
-                            style: TextStyle(fontSize: 16.0),
+                          Row(
+                            children: [
+                              Icon(Icons.timer, size: 20.0),
+                              SizedBox(width: 4.0),
+                              Text(
+                                widget.recipe.duration,
+                                style: TextStyle(fontSize: 16.0),
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 12.0),
+                          Row(
+                            children: [
+                              Icon(Icons.category, size: 20.0),
+                              SizedBox(width: 4.0),
+                              Text(
+                                widget.recipe.category,
+                                style: TextStyle(fontSize: 14.0),
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                      SizedBox(height: 12.0),
-                      Row(
-                        children: [
-                          Icon(Icons.category, size: 20.0),
-                          SizedBox(width: 4.0),
-                          Text(
-                            widget.recipe.category,
-                            style: TextStyle(fontSize: 14.0),
-                          ),
-                        ],
-                      ),
+                      SizedBox(height: 25.0),
                       _buildContainer(
                         'Alerjenler:',
                         Wrap(
@@ -206,7 +213,7 @@ class _RecipeDetailsState extends State<RecipeDetails>
         borderRadius: BorderRadius.circular(8.0),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
+            color: Colors.grey.withOpacity(0.8),
             spreadRadius: 1,
             blurRadius: 5,
             offset: Offset(0, 3),

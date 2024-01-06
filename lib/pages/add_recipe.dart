@@ -1,4 +1,7 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AddRecipe extends StatefulWidget {
   @override
@@ -9,7 +12,7 @@ class _AddRecipeState extends State<AddRecipe> {
   TextEditingController _titleController = TextEditingController();
   TextEditingController _ingredientsController = TextEditingController();
   TextEditingController _stepsController = TextEditingController();
-
+  File? _recipeImage;
   // Seçilen alerjenlerin tutulacağı liste
   List<String> selectedAllergens = [];
 
@@ -46,6 +49,24 @@ class _AddRecipeState extends State<AddRecipe> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            GestureDetector(
+              onTap: _pickImage,
+              child: _recipeImage != null
+                  ? Image.file(
+                      _recipeImage!,
+                      height: 80,
+                      width: 80,
+                      fit: BoxFit.cover,
+                    )
+                  : Container(
+                      height: 80,
+                      width: 80,
+                      color: Colors.grey[300],
+                      child:
+                          Icon(Icons.add_a_photo, size: 50, color: Colors.grey),
+                    ),
+            ),
+            SizedBox(height: 16.0),
             TextField(
               controller: _titleController,
               decoration: InputDecoration(
@@ -101,7 +122,11 @@ class _AddRecipeState extends State<AddRecipe> {
                     },
                     child: Padding(
                       padding: const EdgeInsets.all(12.0),
-                      child: Text('Tarifi Kaydet'),
+                      child: Text(
+                        'Tarifi Kaydet',
+                        style: TextStyle(
+                            fontFamily: GoogleFonts.poppins().fontFamily),
+                      ),
                     ),
                   ),
                 ),
@@ -111,6 +136,17 @@ class _AddRecipeState extends State<AddRecipe> {
         ),
       ),
     );
+  }
+
+  Future<void> _pickImage() async {
+    final picker = ImagePicker();
+    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        _recipeImage = File(pickedFile.path);
+      });
+    }
   }
 
   Widget _buildAllergenChip(String category) {
@@ -140,9 +176,9 @@ class _AddRecipeState extends State<AddRecipe> {
         child: Text(
           category,
           style: TextStyle(
-            color: isSelected ? Colors.white : baseColor,
-            fontWeight: FontWeight.bold,
-          ),
+              color: isSelected ? Colors.white : baseColor,
+              fontWeight: FontWeight.bold,
+              fontFamily: GoogleFonts.poppins().fontFamily),
         ),
         transform: Matrix4.identity()..scale(isSelected ? 1.05 : 1.0),
       ),
@@ -190,7 +226,9 @@ class _AddRecipeState extends State<AddRecipe> {
                         steps.isNotEmpty & allergens
                     ? 'Harika !'
                     : 'Hay Aksi !',
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(
+                    color: Colors.white,
+                    fontFamily: GoogleFonts.poppins().fontFamily),
               ),
             ],
           ),
@@ -201,14 +239,20 @@ class _AddRecipeState extends State<AddRecipe> {
                     steps.isNotEmpty & allergens
                 ? '$title tarifiniz başarıyla kaydedildi.'
                 : 'Tarif kaydedilirken bir hata oluştu.\nLütfen tüm alanları doldurduğunuzdan emin olun.',
-            style: TextStyle(color: Colors.white, fontSize: 16),
+            style: TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontFamily: GoogleFonts.poppins().fontFamily),
           ),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text('Tamam'),
+              child: Text(
+                'Tamam',
+                style: TextStyle(fontFamily: GoogleFonts.poppins().fontFamily),
+              ),
             ),
           ],
         );

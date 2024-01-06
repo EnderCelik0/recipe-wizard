@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:recipe_wizard/pages/profile_drawer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Stock extends StatefulWidget {
@@ -72,6 +73,7 @@ class _StockState extends State<Stock> {
         tooltip: 'Add Stock',
         child: Icon(Icons.add),
       ),
+      drawer: ProfileDrawer(),
     );
   }
 

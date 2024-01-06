@@ -43,16 +43,6 @@ class _ChangeEmailPageState extends State<ChangeEmailPage> {
               },
               child: Text('E-postayı Değiştir'),
             ),
-            Spacer(),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: IconButton(
-                icon: Icon(Icons.arrow_back),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ),
           ],
         ),
       ),

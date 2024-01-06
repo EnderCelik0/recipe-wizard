@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:recipe_wizard/pages/profile_drawer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
@@ -220,6 +221,7 @@ class _ShoppingListState extends State<ShoppingList> {
           ],
         ),
       ),
+      drawer: ProfileDrawer(),
     );
   }
 
