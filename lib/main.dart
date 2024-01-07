@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:recipe_wizard/pages/signupuser.dart';
+import 'package:recipe_wizard/pages/bottom_navigation.dart';
+import 'package:recipe_wizard/pages/loginuser.dart';
+import 'package:recipe_wizard/product/navigator/navigator_routes.dart';
 
 void main() {
   runApp(const MyApp());
@@ -13,7 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData.light().copyWith(
+      theme: ThemeData.dark().copyWith(
         tabBarTheme: const TabBarTheme(
           labelColor: Colors.amberAccent,
           unselectedLabelColor: Colors.black,
@@ -32,11 +33,19 @@ class MyApp extends StatelessWidget {
           type: BottomNavigationBarType.fixed,
           selectedItemColor: Colors.green[400],
         ),
-        floatingActionButtonTheme: FloatingActionButtonThemeData(
+        floatingActionButtonTheme: const FloatingActionButtonThemeData(
           backgroundColor: Color.fromRGBO(145, 100, 0, 1),
         ),
       ),
-      home: SignUp(),
+         onUnknownRoute: (settings) {
+        return MaterialPageRoute(
+          builder: (context) {
+            return Login();
+          },
+        );
+      },
+    //  routes: NavigatorRoutes().items,
+    home : BottomNavigation()
     );
   }
 }

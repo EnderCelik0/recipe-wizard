@@ -4,6 +4,7 @@ import 'package:recipe_wizard/pages/signupuser.dart';
 
 class Login extends StatefulWidget {
   @override
+  // ignore: library_private_types_in_public_api
   _LoginState createState() => _LoginState();
 }
 
@@ -23,7 +24,7 @@ class _LoginState extends State<Login> {
 
               // Karıştırma modu
             ),
-            image: AssetImage('assets/jpg/bg2.jpg'), // Arka plan resmini değiştirebilirsiniz
+            image: const AssetImage('assets/bg2.jpg'), // Arka plan resmini değiştirebilirsiniz
             fit: BoxFit.cover,
           ),
         ),
@@ -35,17 +36,17 @@ class _LoginState extends State<Login> {
               children: [
                 TextField(
                   controller: _usernameController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Kullanıcı Adı',
                     filled: true,
                     
                     border: OutlineInputBorder(),
                   ),
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 TextField(
                   controller: _passwordController,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Şifre',
                     filled: true,
                     fillColor: Colors.white,
@@ -53,7 +54,7 @@ class _LoginState extends State<Login> {
                   ),
                   obscureText: true,
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 ElevatedButton(
                   onPressed: () {
                     // Kayıt ol butonuna tıklama işlemleri buraya gelecek
