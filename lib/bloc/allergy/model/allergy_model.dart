@@ -18,4 +18,10 @@ class AllergyModel {
       _$AllergyModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$AllergyModelToJson(this);
+
+  @override
+  String toString() {
+    // TODO: implement toString
+    return "isim : $name";
+  }
 }

@@ -11,7 +11,7 @@ late ILoginService loginService;
  });
 //LoginModel('eve.holt@reqres.in', 'cityslicka')
  test('Login Test', () async{
-  final response = await loginService.login(LoginModel('nilüfer@gmail.com', 'string123'));
+  final response = await loginService.login(LoginModel('kubi02@gmail.com', 'hello123'));
   final responseData = response.data as Map<String, dynamic>?; // Cast response.data to Map<String, dynamic>
   final userId = responseData?['userId'] as String?; // Access userId from responseData
   expect(userId, isNotNull); // Check if userId is not null in the response
