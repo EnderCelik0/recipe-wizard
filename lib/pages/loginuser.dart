@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:recipe_wizard/components/text_field.dart';
 import 'package:recipe_wizard/pages/bottom_navigation.dart';
-import 'package:recipe_wizard/pages/signupuser.dart';
 import 'package:recipe_wizard/components/custom_alert_dialog.dart'; 
 
 class Login extends StatefulWidget {

@@ -24,7 +24,7 @@ void main() {
     CategoryModel category = CategoryModel(
         categoryName: "Chicken",
         id: "61255672-fc21-4752-a8db-571e174f3f83",
-        createdDate: DateTime.parse("2024-01-13T13:32:29.4045066"));
+    );
     categories.add(category);
     allergies.add(allergy);
     final response = await createUserService.signUp(UserModel(

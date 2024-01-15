@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:recipe_wizard/components/custom_alert_dialog.dart';
 import 'package:recipe_wizard/components/text_field.dart';
-import 'package:recipe_wizard/modals/user_modal.dart';
 import 'package:recipe_wizard/pages/bottom_navigation.dart';
 
 class SignUp extends StatefulWidget {
