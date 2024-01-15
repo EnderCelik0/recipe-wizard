@@ -1,30 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:recipe_wizard/pages/add_recipe.dart';
 import 'package:recipe_wizard/pages/bottom_navigation.dart';
 import 'package:recipe_wizard/pages/loginuser.dart';
-import 'package:recipe_wizard/pages/signupuser.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      theme: ThemeData.light().copyWith(
-        textButtonTheme: TextButtonThemeData(
-          style: TextButton.styleFrom(
-            backgroundColor: Colors.green[400],
-          ),
+      theme: ThemeData.dark().copyWith(
+        tabBarTheme: const TabBarTheme(
+          labelColor: Colors.amberAccent,
+          unselectedLabelColor: Colors.black,
         ),
         appBarTheme: AppBarTheme(
-          backgroundColor: Colors.green[400],
+          backgroundColor: Colors.green,
           elevation: 0,
           titleTextStyle: TextStyle(
             fontFamily: GoogleFonts.poppins().fontFamily,
@@ -34,15 +30,22 @@ class MyApp extends StatelessWidget {
           ),
           centerTitle: true,
         ),
-        bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        bottomNavigationBarTheme: const BottomNavigationBarThemeData(
           type: BottomNavigationBarType.fixed,
-          selectedItemColor: Colors.green[400],
+          selectedItemColor: Colors.green,
         ),
-        floatingActionButtonTheme: FloatingActionButtonThemeData(
+        floatingActionButtonTheme: const FloatingActionButtonThemeData(
           backgroundColor: Color.fromRGBO(145, 100, 0, 1),
         ),
       ),
-      home: Login(),
+      home: BottomNavigation(),
+      onUnknownRoute: (settings) {
+        return MaterialPageRoute(
+          builder: (context) {
+            return Login();
+          },
+        );
+      },
     );
   }
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:recipe_wizard/components/text_field.dart';
 import 'package:recipe_wizard/pages/bottom_navigation.dart';
 import 'package:recipe_wizard/pages/signupuser.dart';
-import 'package:recipe_wizard/components/custom_alert_dialog.dart'; // Eğer kullanmıyorsanız kendi dosya yollarınıza göre güncelleyin
+import 'package:recipe_wizard/components/custom_alert_dialog.dart'; 
 
 class Login extends StatefulWidget {
   @override
@@ -32,6 +32,19 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            colorFilter: ColorFilter.mode(
+              Colors.black.withOpacity(0.5),
+              BlendMode.darken,
+
+              // Karıştırma modu
+            ),
+            image: const AssetImage(
+                'assets/bg2.jpg'), // Arka plan resmini değiştirebilirsiniz
+            fit: BoxFit.cover,
+          ),
+        ),
         child: Center(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
@@ -46,9 +59,19 @@ class _LoginState extends State<Login> {
                 CustomTextField(
                   label: 'Şifre',
                   controller: _passwordController,
+                ),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: _passwordController,
+                  decoration: const InputDecoration(
+                    labelText: 'Şifre',
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(),
+                  ),
                   obscureText: true,
                 ),
-                SizedBox(height: 16),
+                const SizedBox(height: 16),
                 ElevatedButton(
                   style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all<Color>(
