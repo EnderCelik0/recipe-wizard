@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:recipe_wizard/pages/Home.dart';
 import 'package:recipe_wizard/modals/recipe_modal.dart';
 import 'package:recipe_wizard/pages/recipeDetails.dart';
 
@@ -27,23 +28,34 @@ class _RecipeCardState extends State<RecipeCard> {
           children: [
             Stack(
               children: [
-                GestureDetector(
-                  onTap: () {
-                    // Tarif detaylarını göstermek için RecipeDetails sayfasına geçiş yap
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => RecipeDetails(
-                          recipe: widget.recipe,
+                ClipRRect(
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(10),
+                      topRight: Radius.circular(10)),
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => RecipeDetails(
+                            recipe: widget.recipe,
+                          ),
                         ),
-                      ),
-                    );
-                  },
-                  child: Image.asset(
-                    widget.recipe.thumbnail,
-                    height: cardWidth,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
+                      );
+                    },
+                    child: widget.recipe.thumbnail.isEmpty
+                        ? Image.asset(
+                            'assets/no-image.png',
+                            height: cardWidth,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                          )
+                        : Image.network(
+                            widget.recipe.thumbnail,
+                            height: cardWidth,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                          ),
                   ),
                 ),
                 Positioned(
@@ -60,7 +72,7 @@ class _RecipeCardState extends State<RecipeCard> {
                     child: Icon(
                       isFavorite ? Icons.favorite : Icons.favorite_border,
                       color: Colors.red,
-                      size: 22.0,
+                      size: 25.0,
                     ),
                   ),
                 ),
@@ -74,12 +86,15 @@ class _RecipeCardState extends State<RecipeCard> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        widget.recipe.title,
-                        style: TextStyle(
-                            fontSize: 14, fontWeight: FontWeight.bold),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
+                      SizedBox(
+                        width: 200,
+                        child: Text(
+                          widget.recipe.title,
+                          style: TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.bold),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                       Row(
                         children: [
@@ -114,9 +129,9 @@ class _RecipeCardState extends State<RecipeCard> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 4.0),
+                  const SizedBox(height: 10.0),
                   SizedBox(
-                    height: 25.0,
+                    height: 20.0,
                     child: ListView.builder(
                       scrollDirection: Axis.horizontal,
                       itemCount: widget.recipe.allergenCategories.length,

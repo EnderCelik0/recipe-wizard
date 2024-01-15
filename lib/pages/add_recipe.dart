@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:recipe_wizard/components/custom_alert_dialog.dart';
 
 class AddRecipe extends StatefulWidget {
   @override
@@ -163,24 +164,29 @@ class _AddRecipeState extends State<AddRecipe> {
           }
         });
       },
-      child: AnimatedContainer(
-        duration: Duration(milliseconds: 600),
-        curve: isSelected ? Curves.easeOutBack : Curves.easeInBack,
-        decoration: BoxDecoration(
-          color: isSelected
-              ? baseColor.withOpacity(0.7)
-              : baseColor.withOpacity(0.4),
-          borderRadius: BorderRadius.circular(20.0),
-        ),
-        padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
-        child: Text(
-          category,
-          style: TextStyle(
-              color: isSelected ? Colors.white : baseColor,
-              fontWeight: FontWeight.bold,
-              fontFamily: GoogleFonts.poppins().fontFamily),
-        ),
-        transform: Matrix4.identity()..scale(isSelected ? 1.05 : 1.0),
+      child: Column(
+        children: [
+          AnimatedContainer(
+            duration: Duration(milliseconds: 600),
+            curve: isSelected ? Curves.easeOutBack : Curves.easeInBack,
+            decoration: BoxDecoration(
+              color: isSelected
+                  ? baseColor.withOpacity(0.7)
+                  : baseColor.withOpacity(0.4),
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+            padding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+            child: Text(
+              category,
+              style: TextStyle(
+                  color: isSelected ? Colors.white : baseColor,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: GoogleFonts.poppins().fontFamily),
+            ),
+            transform: Matrix4.identity()..scale(isSelected ? 1.05 : 1.0),
+          ),
+          SizedBox(height: 12.0),
+        ],
       ),
     );
   }
@@ -190,71 +196,19 @@ class _AddRecipeState extends State<AddRecipe> {
     String ingredients = _ingredientsController.text;
     String steps = _stepsController.text;
     bool allergens = selectedAllergens.isNotEmpty;
-    bool success = true; // Başarılı durumu kontrolü
+    
+    bool success = title.isNotEmpty && ingredients.isNotEmpty && steps.isNotEmpty && allergens;
 
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: success &&
-                  title.isNotEmpty &&
-                  ingredients.isNotEmpty &&
-                  steps.isNotEmpty & allergens
-              ? Colors.green[400]
-              : Colors.red[400],
-          title: Row(
-            children: [
-              success &&
-                      title.isNotEmpty &&
-                      ingredients.isNotEmpty &&
-                      steps.isNotEmpty & allergens
-                  ? Icon(
-                      Icons.check_circle,
-                      color: Colors.white,
-                      size: 30.0,
-                    )
-                  : Icon(
-                      Icons.cancel,
-                      color: Colors.white,
-                      size: 30.0,
-                    ),
-              SizedBox(width: 8.0),
-              Text(
-                success &&
-                        title.isNotEmpty &&
-                        ingredients.isNotEmpty &&
-                        steps.isNotEmpty & allergens
-                    ? 'Harika !'
-                    : 'Hay Aksi !',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontFamily: GoogleFonts.poppins().fontFamily),
-              ),
-            ],
-          ),
-          content: Text(
-            success &&
-                    title.isNotEmpty &&
-                    ingredients.isNotEmpty &&
-                    steps.isNotEmpty & allergens
-                ? '$title tarifiniz başarıyla kaydedildi.'
-                : 'Tarif kaydedilirken bir hata oluştu.\nLütfen tüm alanları doldurduğunuzdan emin olun.',
-            style: TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-                fontFamily: GoogleFonts.poppins().fontFamily),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text(
-                'Tamam',
-                style: TextStyle(fontFamily: GoogleFonts.poppins().fontFamily),
-              ),
-            ),
-          ],
+        return CustomAlertDialog(
+          success: success,
+          content: success
+              ? '$title tarifiniz başarıyla kaydedildi.'
+              : 'Tarif kaydedilirken bir hata oluştu.\nLütfen tüm alanları doldurduğunuzdan emin olun.',
+          redirectTo:
+              null, // İstediğiniz widget'ı buraya ekleyebilirsiniz, eğer bir yönlendirme yapmayacaksanız null bırakabilirsiniz.
         );
       },
     );

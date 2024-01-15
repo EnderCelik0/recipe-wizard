@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:recipe_wizard/pages/add_recipe.dart';
 import 'package:recipe_wizard/pages/change_email.dart';
 import 'package:recipe_wizard/pages/change_password.dart';
+import 'package:recipe_wizard/pages/loginuser.dart';
 
 class ProfileDrawer extends StatelessWidget {
   @override
@@ -42,13 +43,22 @@ class ProfileDrawer extends StatelessWidget {
             title: Text('Çıkış Yap', style: TextStyle(color: Colors.red)),
             onTap: () {
               Navigator.pop(context);
-              // Log out işlemleri buraya eklenir
+              _navigateToLogin(context);
             },
           ),
         ],
       ),
     );
   }
+}
+
+void _navigateToLogin(BuildContext context) {
+  Navigator.pushReplacement(
+    context,
+    MaterialPageRoute(
+      builder: (context) => Login(),
+    ),
+  );
 }
 
 void _navigateToAddRecipe(BuildContext context) {

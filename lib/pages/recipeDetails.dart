@@ -61,7 +61,8 @@ class _RecipeDetailsState extends State<RecipeDetails>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.recipe.title),
+        title:
+            SizedBox(width: double.infinity, child: Text(widget.recipe.title)),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -71,7 +72,7 @@ class _RecipeDetailsState extends State<RecipeDetails>
               position: _slideAnimation,
               child: FadeTransition(
                 opacity: _fadeAnimation,
-                child: Image.asset(
+                child: Image.network(
                   widget.recipe.thumbnail,
                   width: double.infinity,
                   fit: BoxFit.cover,
@@ -91,11 +92,18 @@ class _RecipeDetailsState extends State<RecipeDetails>
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            widget.recipe.title,
-                            style: TextStyle(
-                              fontSize: 24.0,
-                              fontWeight: FontWeight.bold,
+                          SizedBox(
+                            child: SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.76,
+                              child: Text(
+                                widget.recipe.title,
+                                style: TextStyle(
+                                  fontSize: 24.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                maxLines: 3,
+                                overflow: TextOverflow.ellipsis,
+                              ),
                             ),
                           ),
                           Row(
@@ -143,7 +151,7 @@ class _RecipeDetailsState extends State<RecipeDetails>
                       ),
                       SizedBox(height: 25.0),
                       _buildContainer(
-                        'Alerjenler:',
+                        'Allergens:',
                         Wrap(
                           spacing: 4.0,
                           children: widget.recipe.allergenCategories
@@ -163,7 +171,7 @@ class _RecipeDetailsState extends State<RecipeDetails>
                         ),
                       ),
                       _buildContainer(
-                        'Malzemeler:',
+                        'Ingredients:',
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: widget.recipe.ingredients
@@ -177,21 +185,20 @@ class _RecipeDetailsState extends State<RecipeDetails>
                         ),
                       ),
                       _buildContainer(
-                        'Yapılış:',
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: widget.recipe.steps
-                              .asMap()
-                              .entries
-                              .map((entry) => Text(
-                                    '${entry.key + 1}. ${entry.value}',
-                                    style: TextStyle(
-                                        fontFamily:
-                                            GoogleFonts.poppins().fontFamily),
-                                  ))
-                              .toList(),
-                        ),
-                      ),
+                          'Instructions:',
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: widget.recipe.steps
+                                .asMap()
+                                .entries
+                                .map((entry) => Text(
+                                      entry.value,
+                                      style: TextStyle(
+                                          fontFamily:
+                                              GoogleFonts.poppins().fontFamily),
+                                    ))
+                                .toList(),
+                          )),
                     ],
                   ),
                 ),

@@ -1,8 +1,11 @@
+import 'package:shimmer/shimmer.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:recipe_wizard/modals/recipe_modal.dart';
 import 'package:recipe_wizard/pages/profile_drawer.dart';
 import 'package:recipe_wizard/pages/recipe_card.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class Home extends StatefulWidget {
   @override
@@ -10,99 +13,117 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  // Tarif kartlarını içeren bir liste
-  final List<Recipe> recipes = [
-    Recipe(
-      thumbnail: 'assets/omlette.jpg',
-      title: 'Omlet',
-      duration: '15 dakika',
-      category: 'Kahvaltı',
-      rating: 4.5,
-      allergenCategories: ['Deniz Ürünü', 'Acı'],
-      ingredients: ['Yumurta', 'Süt', 'Tuz', 'Karabiber'],
-      steps: [
-        'Yumurtaları bir kaba kırın.',
-        'Süt, tuz ve karabiber ekleyin.',
-        'Karışımı çırpın ve tavada pişirin.',
-      ],
-    ),
-    Recipe(
-      thumbnail: 'assets/OvenChicken.jpg',
-      title: 'Fırın Tavuk',
-      duration: '1 saat',
-      category: 'Akşam Yemeği',
-      rating: 3.5,
-      allergenCategories: ['Baharatlı', 'Gluten'],
-      ingredients: ['Tavuk', 'Baharatlar', 'Zeytinyağı', 'Tuz'],
-      steps: [
-        'Tavukları baharatlarla marine edin.',
-        'Fırına yerleştirin ve pişirin.',
-        'Afiyet olsun!',
-      ],
-    ),
-    Recipe(
-      thumbnail: 'assets/Guac.jpg',
-      title: 'Guacamole',
-      duration: '10 dakika',
-      category: 'Atıştırmalık',
-      rating: 4.0,
-      allergenCategories: ['Alerjen Yok'],
-      ingredients: ['Avokado', 'Soğan', 'Domates', 'Limonsuyu'],
-      steps: [
-        'Avokadoları ezin.',
-        'Soğanı ve domatesi doğrayın ve avokadoya ekleyin.',
-        'Limonsuyu ekleyip karıştırın.',
-      ],
-    ),
-    Recipe(
-      thumbnail: 'assets/Salmon.jpg',
-      title: 'Izgara Somon',
-      duration: '30 dakika',
-      category: 'Akşam Yemeği',
-      rating: 4.5,
-      allergenCategories: ['Deniz Ürünü', 'Alerjen Yok', 'Gluten'],
-      ingredients: ['Somon', 'Zeytinyağı', 'Limon', 'Tuz'],
-      steps: [
-        'Somonu marine edin.',
-        'Izgarada pişirin ve limon ile servis yapın.',
-      ],
-    ),
-    Recipe(
-      thumbnail: 'assets/Smoothie.jpg',
-      title: 'Smoothie Bowl',
-      duration: '10 dakika',
-      category: 'Kahvaltı',
-      rating: 4.9,
-      allergenCategories: ['Alerjen Yok'],
-      ingredients: ['Meyve', 'Yoğurt', 'Bal', 'Granola'],
-      steps: [
-        'Meyveleri blenderdan geçirin.',
-        'Yoğurt ve bal ekleyip karıştırın.',
-        'Üzerine granola serpip servis yapın.',
-      ],
-    ),
-  ];
-
   // Arama metni ve arama sonuçlarını saklamak için değişkenler
   String searchText = '';
   List<Recipe> searchResults = [];
   List<Recipe> favoriteRecipes = [];
+  List<Recipe> recommendedRecipes = [];
+  List<Recipe> recommendedRecipesForYou = [];
+  bool isLoading = true;
 
-  void updateSearchResults() {
-    searchResults = recipes.where((recipe) {
-      return recipe.title.toLowerCase().contains(searchText.toLowerCase());
-    }).toList();
+  @override
+  void initState() {
+    super.initState();
+    fetchDataFromApi();
   }
 
-  void updateFavoriteRecipes(Recipe recipe, bool isFavorite) {
+  Future<void> fetchDataFromApi() async {
+    await fetchRecommendedRecipes();
+    await fetchRecommendedRecipesForYou();
     setState(() {
-      if (isFavorite) {
-        favoriteRecipes.add(recipe);
-      } else {
-        favoriteRecipes.remove(recipe);
-      }
+      isLoading = false;
     });
   }
+
+  Future<void> fetchRecommendedRecipes() async {
+    final response = await http
+        .get(Uri.parse('https://www.themealdb.com/api/json/v1/1/random.php'));
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = json.decode(response.body);
+      final List<dynamic> meals = data['meals'];
+
+      List<Recipe> fetchedRecipes = meals.map((meal) {
+        List<String> ingredients = [];
+        for (int i = 1; i <= 20; i++) {
+          String ingredient = meal['strIngredient$i'];
+          String measure = meal['strMeasure$i'];
+
+          if (ingredient.isNotEmpty) {
+            String formattedIngredient = '$measure $ingredient';
+            ingredients.add(formattedIngredient);
+          }
+        }
+
+        return Recipe(
+          thumbnail: meal['strMealThumb'] ?? '',
+          title: meal['strMeal'] ?? '',
+          duration: '30 dakika',
+          category: meal['strCategory'] ?? '',
+          rating: 4.0,
+          allergenCategories: ['Alerjen Yok'],
+          ingredients: ingredients,
+          steps: [
+            meal['strInstructions'] ?? '',
+          ],
+        );
+      }).toList();
+
+      setState(() {
+        recommendedRecipes = fetchedRecipes;
+      });
+    } else {
+      throw Exception('Failed to load recommended recipes from API');
+    }
+  }
+
+  Future<void> fetchRecommendedRecipesForYou() async {
+    final response = await http
+        .get(Uri.parse('https://www.themealdb.com/api/json/v1/1/random.php'));
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data = json.decode(response.body);
+      final List<dynamic> meals = data['meals'];
+
+      List<Recipe> fetchedRecipes = meals.map((meal) {
+        List<String> ingredients = [];
+        for (int i = 1; i <= 20; i++) {
+          String ingredient = meal['strIngredient$i'];
+          String measure = meal['strMeasure$i'];
+
+          if (ingredient.isNotEmpty) {
+            String formattedIngredient = '$measure $ingredient';
+            ingredients.add(formattedIngredient);
+          }
+        }
+
+        return Recipe(
+          thumbnail: meal['strMealThumb'] ?? '',
+          title: meal['strMeal'] ?? '',
+          duration: '30 dakika',
+          category: meal['strCategory'] ?? '',
+          rating: 4.0,
+          allergenCategories: ['Alerjen Yok'],
+          ingredients: ingredients,
+          steps: [
+            meal['strInstructions'] ?? '',
+          ],
+        );
+      }).toList();
+
+      setState(() {
+        recommendedRecipesForYou = fetchedRecipes;
+      });
+    } else {
+      throw Exception('Failed to load recommended recipes for you from API');
+    }
+  }
+
+  // void updateSearchResults() {
+  //   searchResults = recipes.where((recipe) {
+  //     return recipe.title.toLowerCase().contains(searchText.toLowerCase());
+  //   }).toList();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -119,7 +140,7 @@ class _HomeState extends State<Home> {
             onChanged: (value) {
               setState(() {
                 searchText = value;
-                updateSearchResults();
+                // updateSearchResults();
               });
             },
             decoration: InputDecoration(
@@ -132,16 +153,21 @@ class _HomeState extends State<Home> {
       ),
       body: ListView(
         children: [
-          buildCategoryListView("Önerilen Tarifler", recipes),
-          buildCategoryListView("Sizin İçin Tarifler", recipes),
-          buildCategoryListView("Son Görüntülenen Tarifler", recipes),
-          buildCategoryListView("Stoğunuzdakilere Göre Tarifler", recipes),
+          buildCategoryListView(
+              "Önerilen Tarifler", recommendedRecipes, isLoading),
+          buildCategoryListView(
+              "Sizin İçin Tarifler", recommendedRecipesForYou, isLoading),
+          buildCategoryListView(
+              "Son Görüntülenen Tarifler", recommendedRecipes, isLoading),
+          // buildCategoryListView(
+          //     "Stoğunuzdakilere Göre Tarifler", recipes, isLoading),
         ],
       ),
     );
   }
 
-  Widget buildCategoryListView(String category, List<Recipe> recipes) {
+  Widget buildCategoryListView(
+      String category, List<Recipe> recipes, bool isLoading) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -150,29 +176,56 @@ class _HomeState extends State<Home> {
           child: Text(
             category,
             style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-                fontFamily: GoogleFonts.poppins().fontFamily),
+              fontSize: 18,
+              fontWeight: FontWeight.w700,
+              fontFamily: GoogleFonts.poppins().fontFamily,
+            ),
           ),
         ),
-        SizedBox(
-          height: 263, // Set the desired height for each category
-          child: ListView.separated(
-            scrollDirection: Axis.horizontal,
-            itemCount: recipes.length,
-            itemBuilder: (context, index) {
-              return RecipeCard(
-                recipe: recipes[index],
-                onFavoriteChanged: (isFavorite) {
-                  updateFavoriteRecipes(recipes[index], isFavorite);
-                },
-              );
-            },
-            separatorBuilder: (context, index) {
-              return const SizedBox(width: 10.0);
-            },
-          ),
-        ),
+        isLoading
+            ? Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8.0),
+                    color: Colors.grey[300],
+                  ),
+                  height: 150,
+                  width: MediaQuery.sizeOf(context).width / 1.1,
+                  child: Shimmer.fromColors(
+                    baseColor: Color(0xE7E7E7),
+                    highlightColor: Colors.white,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8.0),
+                        color: Colors.grey[300],
+                      ),
+                      width: 200.0,
+                      height: 100.0,
+                      child: Container(
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            : SizedBox(
+                height: MediaQuery.sizeOf(context).height / 3.6,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: recipes.length,
+                  itemBuilder: (context, index) {
+                    return RecipeCard(
+                      recipe: recipes[index],
+                      onFavoriteChanged: (isFavorite) {},
+                    );
+                  },
+                  separatorBuilder: (context, index) {
+                    return SizedBox(width: 8.0);
+                  },
+                ),
+              ),
+        SizedBox(height: 15.0)
       ],
     );
   }
