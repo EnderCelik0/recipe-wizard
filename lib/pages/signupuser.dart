@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:recipe_wizard/bloc/user/createuser/cubit/create_user_cubit.dart';
+import 'package:recipe_wizard/bloc/user/createuser/cubit/create_user_state.dart';
+import 'package:recipe_wizard/bloc/user/createuser/service/create_user_service.dart';
 import 'package:recipe_wizard/components/custom_alert_dialog.dart';
 import 'package:recipe_wizard/components/text_field.dart';
+import 'package:recipe_wizard/core/service/project_dio_manager.dart';
 import 'package:recipe_wizard/pages/bottom_navigation.dart';
 
 class SignUp extends StatefulWidget {
@@ -71,118 +76,130 @@ class _SignUpState extends State<SignUp> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Sign Up',
-          style: TextStyle(color: Colors.white), // Başlık rengi beyaz
+    return BlocProvider<CreateUserCubit>(
+      create: (context) => CreateUserCubit(CreateUserService(ProjectNetworkManager.instance.service)),
+      child: Scaffold(
+        appBar:
+         AppBar(
+              title: BlocBuilder<CreateUserCubit, CreateUserState>(
+                
+            builder: (context, state) {
+              return state.isLoading
+                  ? CircularProgressIndicator(
+                      color: Theme.of(context).secondaryHeaderColor)
+                  : const Text(
+                     'Sign Up',
+                style: TextStyle(color: Colors.white), // Başlık rengi beyaz
+              );
+          },  
+          ),
         ),
-      ),
-      body: Center(
-        child: Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
-          child: Stepper(
-            stepIconBuilder: (stepIndex, stepState) =>
-                Icon(Icons.person, color: Colors.white),
-            type: StepperType.vertical,
-            currentStep: _currentStep,
-            onStepContinue: handleStepContinue,
-            onStepCancel: () => setState(() => _currentStep -= 1),
-            steps: [
-              Step(
-                title: const Text(
-                  'Kullanıcı Bilgileri (Tüm alanları doldurunuz.)',
-                  style: TextStyle(color: Colors.black), // Başlık rengi beyaz
+        body: Center(
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
+            child: Stepper(
+              stepIconBuilder: (stepIndex, stepState) =>
+                  Icon(Icons.person, color: Colors.white),
+              type: StepperType.vertical,
+              currentStep: _currentStep,
+              onStepContinue: handleStepContinue,
+              onStepCancel: () => setState(() => _currentStep -= 1),
+              steps: [
+                Step(
+                  title: const Text(
+                    'Kullanıcı Bilgileri (Tüm alanları doldurunuz.)',
+                    style: TextStyle(color: Colors.black), // Başlık rengi beyaz
+                  ),
+                  content: Column(
+                    children: [
+                      const SizedBox(height: 10),
+                      CustomTextField(
+                        label: 'Kullanıcı Adı',
+                        controller: _usernameController,
+                      ),
+                      CustomTextField(
+                        label: 'İsim',
+                        controller: _nameController,
+                      ),
+                      CustomTextField(
+                        label: 'Soyisim',
+                        controller: _surnameController,
+                      ),
+                      CustomTextField(
+                        label: 'Email',
+                        controller: _emailController,
+                      ),
+                      CustomTextField(
+                        label: 'Şifre',
+                        controller: _passwordController,
+                        obscureText: true,
+                      ),
+                      CustomTextField(
+                        label: 'Şifre Tekrar',
+                        controller: _passwordConfirmController,
+                        obscureText: true,
+                      ),
+                    ],
+                  ),
+                  isActive: _currentStep == 0,
                 ),
-                content: Column(
-                  children: [
-                    const SizedBox(height: 10),
-                    CustomTextField(
-                      label: 'Kullanıcı Adı',
-                      controller: _usernameController,
-                    ),
-                    CustomTextField(
-                      label: 'İsim',
-                      controller: _nameController,
-                    ),
-                    CustomTextField(
-                      label: 'Soyisim',
-                      controller: _surnameController,
-                    ),
-                    CustomTextField(
-                      label: 'Email',
-                      controller: _emailController,
-                    ),
-                    CustomTextField(
-                      label: 'Şifre',
-                      controller: _passwordController,
-                      obscureText: true,
-                    ),
-                    CustomTextField(
-                      label: 'Şifre Tekrar',
-                      controller: _passwordConfirmController,
-                      obscureText: true,
-                    ),
-                  ],
+                Step(
+                  title: Text(
+                    'Alerjen Seçimi (En az 1 tane seçiniz.)',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontFamily: GoogleFonts.poppins()
+                            .fontFamily), // Başlık rengi beyaz
+                  ),
+                  content: CheckboxList(
+                    items: const [
+                      'Dairy',
+                      'Gluten',
+                      'Peanut',
+                      'Soy',
+                      'Egg',
+                      'Sea Food',
+                      'No Allergies'
+                    ],
+                    selectedItems: _selectedAllergens,
+                    onChanged: (List<String> selectedItems) {
+                      setState(() {
+                        _selectedAllergens = selectedItems;
+                      });
+                    },
+                  ),
+                  isActive: _currentStep == 1,
                 ),
-                isActive: _currentStep == 0,
-              ),
-              Step(
-                title: Text(
-                  'Alerjen Seçimi (En az 1 tane seçiniz.)',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontFamily: GoogleFonts.poppins()
-                          .fontFamily), // Başlık rengi beyaz
+                Step(
+                  title: Text(
+                    'Kategori Seçimi (En az 1 tane seçiniz.)',
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontFamily: GoogleFonts.poppins()
+                            .fontFamily), // Başlık rengi beyaz
+                  ),
+                  content: CheckboxList(
+                    items: const [
+                      'Kahvaltı',
+                      'Akşam Yemeği',
+                      'Atıştırmalık',
+                      'Tatlı',
+                      'Salata',
+                      'Çorba',
+                      'Vejetaryen',
+                    ],
+                    selectedItems: _selectedCategories,
+                    onChanged: (List<String> selectedItems) {
+                      setState(() {
+                        _selectedCategories = selectedItems;
+                      });
+                    },
+                  ),
+                  isActive: _currentStep == 2,
                 ),
-                content: CheckboxList(
-                  items: const [
-                    'Dairy',
-                    'Gluten',
-                    'Peanut',
-                    'Soy',
-                    'Egg',
-                    'Sea Food',
-                    'No Allergies'
-                  ],
-                  selectedItems: _selectedAllergens,
-                  onChanged: (List<String> selectedItems) {
-                    setState(() {
-                      _selectedAllergens = selectedItems;
-                    });
-                  },
-                ),
-                isActive: _currentStep == 1,
-              ),
-              Step(
-                title: Text(
-                  'Kategori Seçimi (En az 1 tane seçiniz.)',
-                  style: TextStyle(
-                      color: Colors.black,
-                      fontFamily: GoogleFonts.poppins()
-                          .fontFamily), // Başlık rengi beyaz
-                ),
-                content: CheckboxList(
-                  items: const [
-                    'Kahvaltı',
-                    'Akşam Yemeği',
-                    'Atıştırmalık',
-                    'Tatlı',
-                    'Salata',
-                    'Çorba',
-                    'Vejetaryen',
-                  ],
-                  selectedItems: _selectedCategories,
-                  onChanged: (List<String> selectedItems) {
-                    setState(() {
-                      _selectedCategories = selectedItems;
-                    });
-                  },
-                ),
-                isActive: _currentStep == 2,
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

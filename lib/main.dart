@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:recipe_wizard/pages/bottom_navigation.dart';
 import 'package:recipe_wizard/pages/loginuser.dart';
+import 'package:recipe_wizard/product/navigator/navigator_routes.dart';
 
 void main() {
   runApp(const MyApp());
@@ -38,7 +39,7 @@ class MyApp extends StatelessWidget {
           backgroundColor: Color.fromRGBO(145, 100, 0, 1),
         ),
       ),
-      home: BottomNavigation(),
+      routes: NavigatorRoutes().items,
       onUnknownRoute: (settings) {
         return MaterialPageRoute(
           builder: (context) {

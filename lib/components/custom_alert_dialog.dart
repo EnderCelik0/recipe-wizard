@@ -95,7 +95,8 @@ class _CustomAlertDialogState extends State<CustomAlertDialog>
         ),
         actions: [
           TextButton(
-            style: TextButtonTheme.of(context).style!.copyWith(
+            style: 
+                 ButtonStyle(
                   backgroundColor: MaterialStateProperty.all<Color>(
                     Colors.white,
                   ),

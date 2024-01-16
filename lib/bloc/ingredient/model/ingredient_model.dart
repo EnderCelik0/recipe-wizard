@@ -14,4 +14,9 @@ class IngredientModel {
       _$IngredientModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$IngredientModelToJson(this);
+      @override
+  String toString() {
+    // TODO: implement toString
+    return "isim : $ingredientName";
+  }
 }
